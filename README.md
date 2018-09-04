@@ -26,33 +26,6 @@ source .venv/bin/activate
 (.venv) > $ django-admin startproject django_rest_framework .
 ```
 
-### 创建模型
-```
-(.venv) > $ python manage.py startapp musics
-```
-
-```
-(.venv) > $ tree
-.
-├── django_rest_framework
-│   ├── __init__.py
-│   ├── __pycache__
-│   │   ├── __init__.cpython-36.pyc
-│   │   └── settings.cpython-36.pyc
-│   ├── settings.py
-│   ├── urls.py
-│   └── wsgi.py
-├── manage.py
-└── musics
-    ├── admin.py
-    ├── apps.py
-    ├── __init__.py
-    ├── migrations
-    │   └── __init__.py
-    ├── models.py
-    ├── tests.py
-    └── views.py
-```
 
 
 ### 配置数据库
@@ -112,4 +85,59 @@ Running migrations:
   Applying auth.0008_alter_user_username_max_length... OK
   Applying auth.0009_alter_user_last_name_max_length... OK
   Applying sessions.0001_initial... OK
+```
+
+#### 添加管理员
+```
+(.venv) > $ python manage.py createsuperuser
+```
+
+#### 运行项目
+```
+(.venv) > $ python manage.py runserver 0:8000
+```
+
+
+
+### 创建模型
+```
+(.venv) > $ python manage.py startapp musics
+```
+
+```
+(.venv) > $ tree
+.
+├── django_rest_framework
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-36.pyc
+│   │   └── settings.cpython-36.pyc
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+└── musics
+    ├── admin.py
+    ├── apps.py
+    ├── __init__.py
+    ├── migrations
+    │   └── __init__.py
+    ├── models.py
+    ├── tests.py
+    └── views.py
+```
+
+添加应用到配置文件中：
+```python
+INSTALLED_APPS = [
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'rest_framework',
+    'musics',
+]
+
 ```
