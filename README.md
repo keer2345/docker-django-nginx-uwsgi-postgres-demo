@@ -17,7 +17,7 @@ source .venv/bin/activate
 ```
 
 ```
-(.venv) > $ pip install django djangorestframework psycopg2 uwsgi
+(.venv) > $ pip install django djangorestframework psycopg2-binary uwsgi
 ```
 ### 创建项目
 ```
@@ -25,6 +25,7 @@ source .venv/bin/activate
 (.venv) > $ cd api
 (.venv) > $ django-admin startproject django_rest_framework .
 ```
+
 ### 创建模型
 ```
 (.venv) > $ python manage.py startapp musics
@@ -51,4 +52,64 @@ source .venv/bin/activate
     ├── models.py
     ├── tests.py
     └── views.py
+```
+
+
+### 配置数据库
+开发环境中，采用本地开发，并使用 Docker 搭建的 Postgres 数据库，具体的搭建过程可以参考 [docker-databases-with-adminer](https://github.com/keer2345/docker-databases-with-adminer) 。
+
+#### 测试 Postgres 链接
+```
+(.venv) > ipython
+In [1]: import psycopg2
+In [2]: con = psycopg2.connect("host=127.0.0.1 port=54321 dbname=pgDB user=root password=123456")
+
+```
+
+#### Django 中的配置
+
+`api/django_rest_framework/settings.py` :
+```
+DATABASES = {
+    'default': {
+        # SQLITE3
+        #  'ENGINE': 'django.db.backends.sqlite3',
+        #  'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+        # POSTGRES
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'pgDB',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': 'localhost',
+        'PORT': 54321,
+    }
+}
+```
+
+#### 同步数据库
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+```
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying sessions.0001_initial... OK
 ```
